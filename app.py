@@ -35,22 +35,22 @@ login_manager.login_view = "login"
 
 # defines a user
 class User(UserMixin):
-    def __init__(self, id):
-        self.id = id
-        self.name = "user" + str(id)
-        self.password = self.name + "_secret"
+    def __init__(self, id, name):
+        self.id = id # Strava athlete id
+        self.name = name # Strava name
 
     def __repr__(self):
-        return "%d/%s/%s" % (self.id, self.name, self.password)
+        return "%d/%s" % (self.id, self.auth_code)
 
 # ------------------------------------------------------------------------------
 
 @app.route('/login')
 def login():
-    if request.method == 'GET':
-        html = render_template('login.html')
-        response = make_response(html)
-        return response
+    auth_code = request.args.get('a')
+
+    html = render_template('login.html')
+    response = make_response(html)
+    return response
 
 
 @app.route('/')
