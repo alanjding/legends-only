@@ -82,7 +82,9 @@ def login():
 def check_eligibility():
     # incredibly hacky workaround for malfunctioning ImmutableMultiDict
     request_str = str(request.args)
+    print('*********request_str**********' + request_str)
     match = re.search(r'[0-9a-f]{40}[0-9a-f]*?', request_str)
+    print(match)
     auth_code = match.group(0)
 
     access_details = get_access_details(auth_code)
