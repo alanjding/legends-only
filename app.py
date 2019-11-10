@@ -17,6 +17,12 @@ import os
 
 app = Flask(__name__, template_folder='./templates')
 
+# config
+app.config.update(
+    DEBUG=True,
+    SECRET_KEY=os.environ['SESSION_KEY']
+)
+
 # Fix performance hits from default config (see StackOverflow post on this)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
