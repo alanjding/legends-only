@@ -80,12 +80,8 @@ def login():
 
 @app.route('/exchange-token')
 def check_eligibility():
-    # incredibly hacky workaround for malfunctioning ImmutableMultiDict
-    request_url = str(request.url)
-    print('*********request_url**********' + request_url)
-    match = re.search(r'[0-9a-f]{40}[0-9a-f]*?', request_url)
-    print(match)
-    auth_code = match.group(0)
+    auth_code = request.query_string
+    print('************auth_code************' + auth_code)
 
     access_details = get_access_details(auth_code)
     access_token = access_details['access_token']
