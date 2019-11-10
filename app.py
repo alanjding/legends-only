@@ -14,7 +14,7 @@ from flask_login import LoginManager, UserMixin, \
     login_required, login_user, logout_user
 import os
 import requests
-import json
+import re
 
 # ------------------------------------------------------------------------------
 
@@ -80,8 +80,10 @@ def login():
 
 @app.route('/exchange-token')
 def check_eligibility():
-    auth_code = request.args.get('code')
-    print('****************request.args*******************: ' + str({k: v for k, v in request.args.items()}))
+    # incredibly hacky workaround for malfunctioning ImmutableMultiDict
+    request_str = str(request.args)
+    match = re.search(r'[0-9a-f]{40}[0-9a-f]*?', request_str)
+    auth_code = match.group(0)
 
     access_details = get_access_details(auth_code)
     access_token = access_details['access_token']
