@@ -141,6 +141,11 @@ def index():
     html = render_template('index.html')
     return make_response(html)
 
+# callback to reload the user object
+@login_manager.user_loader
+def load_user(userid):
+    return User(userid)
+
 # ------------------------------------------------------------------------------
 
 if __name__ == '__main__':
