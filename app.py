@@ -6,12 +6,21 @@
 # ------------------------------------------------------------------------------
 
 from sys import argv
-from flask import Flask, request, make_response, redirect, render_template
+from flask import Flask, request, make_response, redirect, render_template, \
+    url_for
 from flask_heroku import Heroku
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, \
     login_required, login_user, logout_user
 import os
+import requests
+import json
+
+# ------------------------------------------------------------------------------
+
+API_BASE_URL = 'https://www.strava.com/api/v3'
+LEGENDS_OUT = '22248347'
+LEGENDS_BACK = '22248349'
 
 # ------------------------------------------------------------------------------
 
@@ -50,22 +59,65 @@ class User(UserMixin):
 
 # ------------------------------------------------------------------------------
 
+# helper function definitions
+def get_access_details(auth_code):
+    r = requests.post('https://www.strava.com/oauth/token' +
+                      '?client_id=' + os.environ['CLIENT_ID'] +
+                      '&client_secret=' + os.environ['CLIENT_SECRET'] +
+                      '&code=' + auth_code +
+                      '&grant_type=authorization_code')
+
+    return r.json()
+
+# ------------------------------------------------------------------------------
+
+# site pages
+
 @app.route('/login')
 def login():
-    auth_code = request.args.get('a')
-
     html = render_template('login.html')
-    response = make_response(html)
-    return response
+    return make_response(html)
 
+@app.route('/exchange-token')
+def check_eligibility():
+    auth_code = request.args.get('code')
+
+    access_details = get_access_details(auth_code)
+    access_token = access_details['access_token']
+    user_id = access_details['athlete']['id']
+    username = access_details['athlete']['firstname'] + ' ' + \
+        access_details['athlete']['lastname']
+
+    r_out = requests.get(API_BASE_URL +
+                         '/segments/' + LEGENDS_OUT + '/all_efforts' +
+                         '?access_token=' + access_token)
+
+    legends_out_data = r_out.json()
+
+    r_back = requests.get(API_BASE_URL +
+                          '/segments/' + LEGENDS_BACK + '/all_efforts' +
+                          '?access_token=' + access_token)
+
+    legends_back_data = r_back.json()
+
+    if len(legends_out_data) == 0 or len(legends_back_data) == 0:
+        return redirect(url_for('not-legend'))
+    else:
+        user = User(user_id, username)
+        login_user(user)
+        return redirect(url_for('index'))
+
+@app.route('/not-legend')
+def not_legend():
+    html = render_template('not-eligible.html')
+    return make_response(html)
 
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
     html = render_template('index.html')
-    response = make_response(html)
-    return response
+    return make_response(html)
 
 # ------------------------------------------------------------------------------
 
