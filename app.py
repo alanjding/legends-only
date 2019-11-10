@@ -58,7 +58,7 @@ def check_eligibility():
     print('*********url_str**********' + url_str)
 
     # try again if no code returned
-    if len(url_str) == 0:
+    if 'code' not in url_str:
         return redirect('https://www.strava.com/oauth/authorize' +
                         '?client_id=32278&response_type=code' +
                         '&redirect_uri=http://legends-only.herokuapp.com/' +
