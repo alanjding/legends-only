@@ -53,12 +53,12 @@ def login():
 def check_eligibility():
     global is_authorized
 
-    # incredibly hacky workaround for malfunctioning ImmutableMultiDict
+    # incredibly hacky workaround for inconsistent Strava response
     url_str = str(request.query_string)
     print('*********url_str**********' + url_str)
 
     # try again if no code returned
-    if url_str == '':
+    if len(url_str) == 0:
         return redirect('https://www.strava.com/oauth/authorize' +
                         '?client_id=32278&response_type=code' +
                         '&redirect_uri=http://legends-only.herokuapp.com/' +
