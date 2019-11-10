@@ -9,9 +9,6 @@ from sys import argv
 from flask import Flask, request, make_response, redirect, render_template, \
     url_for
 from flask_heroku import Heroku
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin, \
-    login_required, login_user, logout_user
 import os
 import requests
 import re
@@ -24,51 +21,13 @@ LEGENDS_BACK = '22248349'
 
 # ------------------------------------------------------------------------------
 
+# global data
 app = Flask(__name__, template_folder='./templates')
-
-# config
-app.config.update(
-    DEBUG=True,
-    SECRET_KEY=os.environ['SESSION_KEY']
-)
-
-# Fix performance hits from default config (see StackOverflow post on this)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# Populates DATABASE_URL environment variable
-heroku = Heroku(app)
-database_url = os.environ['DATABASE_URL']
-
-db = SQLAlchemy(app)
-
-# flask-login
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = "login"
+is_authorized = False
 
 # ------------------------------------------------------------------------------
 
-# defines a user
-class User(db.Model):
-    __tablename__ = 'user'
-
-    id = db.Column(db.String, primary_key=True)
-    name = db.Column(db.String)
-    authenticated = db.Column(db.Boolean, default=False)
-
-    def is_active(self):
-        return True
-
-    def get_id(self):
-        return self.id
-
-    def is_authenticated(self):
-        return self.authenticated
-
-    def is_anonymous(self):
-        return False
-
-# helper function definitions
+# helper function definition
 def get_access_details(auth_code):
     url = 'https://www.strava.com/oauth/token' + \
           '?client_id=' + os.environ['CLIENT_ID'] + \
@@ -134,8 +93,7 @@ def check_eligibility():
     if len(legends_out_data) == 0 or len(legends_back_data) == 0:
         return redirect(url_for('not-legend'))
     else:
-        user = User()
-        login_user(user)
+        is_authorized = True
         return redirect(url_for('index'))
 
 @app.route('/not-legend')
@@ -145,15 +103,12 @@ def not_legend():
 
 @app.route('/')
 @app.route('/index')
-@login_required
 def index():
-    html = render_template('index.html')
-    return make_response(html)
-
-# callback to reload the user object
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
+    if is_authorized:
+        html = render_template('index.html')
+        return make_response(html)
+    else:
+        return redirect(url_for('login'))
 
 # ------------------------------------------------------------------------------
 
