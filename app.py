@@ -160,6 +160,8 @@ def load_user(user_id):
 # ------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+    db.create_all()
+
     if len(argv) != 2:
         print('Usage: ' + argv[0] + ' port')
         exit(1)
