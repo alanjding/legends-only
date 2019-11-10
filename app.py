@@ -51,6 +51,8 @@ def login():
 
 @app.route('/exchange-token')
 def check_eligibility():
+    global is_authorized
+
     # incredibly hacky workaround for malfunctioning ImmutableMultiDict
     url_str = str(request.query_string)
     print('*********url_str**********' + url_str)
