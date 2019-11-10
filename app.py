@@ -83,13 +83,25 @@ def check_eligibility():
     # incredibly hacky workaround for malfunctioning ImmutableMultiDict
     url_str = str(request.query_string)
     print('*********url_str**********' + url_str)
+
+    # try again if no code returned
+    if url_str == '':
+        return redirect('https://www.strava.com/oauth/authorize' +
+                        '?client_id=32278&response_type=code' +
+                        '&redirect_uri=http://legends-only.herokuapp.com/' +
+                        'exchange-token&approval_prompt=force&scope=read')
+
     match = re.search(r'[0-9a-f]{40}[0-9a-f]*?', url_str)
     print(match)
+
+    if match is None:
+        return redirect(url_for('login'))
+
     auth_code = match.group(0)
     print('*********auth_code**********' + auth_code)
 
     access_details = get_access_details(auth_code)
-    print('*********access_details**********' + access_details)
+    print('*********access_details**********' + str(access_details))
     access_token = access_details['access_token']
     user_id = access_details['athlete']['id']
     username = access_details['athlete']['firstname'] + ' ' + \
