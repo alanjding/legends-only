@@ -134,7 +134,7 @@ def check_eligibility():
     if len(legends_out_data) == 0 or len(legends_back_data) == 0:
         return redirect(url_for('not-legend'))
     else:
-        user = User(user_id, username, True)
+        user = User()
         login_user(user)
         return redirect(url_for('index'))
 
