@@ -86,8 +86,10 @@ def check_eligibility():
     match = re.search(r'[0-9a-f]{40}[0-9a-f]*?', url_str)
     print(match)
     auth_code = match.group(0)
+    print('*********auth_code**********' + auth_code)
 
     access_details = get_access_details(auth_code)
+    print('*********access_details**********' + access_details)
     access_token = access_details['access_token']
     user_id = access_details['athlete']['id']
     username = access_details['athlete']['firstname'] + ' ' + \
