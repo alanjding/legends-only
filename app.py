@@ -6,7 +6,6 @@
 # ------------------------------------------------------------------------------
 
 from sys import argv
-from database import Database
 from flask import Flask, request, make_response, redirect, render_template
 from flask_heroku import Heroku
 from flask_sqlalchemy import SQLAlchemy
