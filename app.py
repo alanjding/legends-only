@@ -9,6 +9,8 @@ from sys import argv
 from flask import Flask, request, make_response, redirect, render_template
 from flask_heroku import Heroku
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, \
+    login_required, login_user, logout_user
 import os
 
 # ------------------------------------------------------------------------------
@@ -24,10 +26,36 @@ database_url = os.environ['DATABASE_URL']
 
 db = SQLAlchemy(app)
 
+# flask-login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
 # ------------------------------------------------------------------------------
+
+# defines a user
+class User(UserMixin):
+    def __init__(self, id):
+        self.id = id
+        self.name = "user" + str(id)
+        self.password = self.name + "_secret"
+
+    def __repr__(self):
+        return "%d/%s/%s" % (self.id, self.name, self.password)
+
+# ------------------------------------------------------------------------------
+
+@app.route('/login')
+def login():
+    if request.method == 'GET':
+        html = render_template('login.html')
+        response = make_response(html)
+        return response
+
 
 @app.route('/')
 @app.route('/index')
+@login_required
 def index():
     html = render_template('index.html')
     response = make_response(html)
