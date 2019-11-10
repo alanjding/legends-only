@@ -61,11 +61,14 @@ class User(UserMixin):
 
 # helper function definitions
 def get_access_details(auth_code):
-    r = requests.post('https://www.strava.com/oauth/token' +
-                      '?client_id=' + os.environ['CLIENT_ID'] +
-                      '&client_secret=' + os.environ['CLIENT_SECRET'] +
-                      '&code=' + auth_code +
-                      '&grant_type=authorization_code')
+    url = 'https://www.strava.com/oauth/token' + \
+          '?client_id=' + os.environ['CLIENT_ID'] + \
+          '&client_secret=' + os.environ['CLIENT_SECRET'] + \
+          '&code=' + auth_code + \
+          '&grant_type=authorization_code'
+
+    print(url)
+    r = requests.post(url)
 
     return r.json()
 
