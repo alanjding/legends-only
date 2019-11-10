@@ -41,6 +41,9 @@ database_url = os.environ['DATABASE_URL']
 
 db = SQLAlchemy(app)
 
+# creates user table if it doesn't exist
+engine =
+
 # flask-login
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -160,6 +163,8 @@ def load_user(user_id):
 # ------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+    db.create_all()
+
     if len(argv) != 2:
         print('Usage: ' + argv[0] + ' port')
         exit(1)
