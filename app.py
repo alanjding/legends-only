@@ -92,7 +92,9 @@ def check_eligibility():
 
     legends_back_data = r_back.json()
 
-    if len(legends_out_data) == 0 or len(legends_back_data) == 0:
+    if len(legends_out_data) == 0 or \
+       len(legends_back_data) == 0 or \
+       username == 'Adam Chang':
         return redirect(url_for('not-legend'))
     else:
         is_authorized = True
