@@ -68,13 +68,6 @@ class User(db.Model):
     def is_anonymous(self):
         return False
 
-# ------------------------------------------------------------------------------
-
-db.create_all()
-db.session.commit()
-
-# ------------------------------------------------------------------------------
-
 # helper function definitions
 def get_access_details(auth_code):
     url = 'https://www.strava.com/oauth/token' + \
