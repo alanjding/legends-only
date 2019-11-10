@@ -80,7 +80,8 @@ def login():
 
 @app.route('/exchange-token')
 def check_eligibility():
-    auth_code = request.args.get('code')
+    auth_code = str(request.args.get('code'))
+    print(request.args)
 
     access_details = get_access_details(auth_code)
     access_token = access_details['access_token']
