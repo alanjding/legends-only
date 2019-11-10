@@ -49,13 +49,24 @@ login_manager.login_view = "login"
 # ------------------------------------------------------------------------------
 
 # defines a user
-class User(UserMixin):
-    def __init__(self, id, name):
-        self.id = id # Strava athlete id
-        self.name = name # Strava name
+class User(db.Model):
+    __tablename__ = 'user'
 
-    def __repr__(self):
-        return "%d/%s" % (self.id, self.auth_code)
+    id = db.Column(db.String, primary_key=True)
+    name = db.Column(db.String)
+    authenticated = db.Column(db.Boolean, default=False)
+
+    def is_active(self):
+        return True
+
+    def get_id(self):
+        return self.id
+
+    def is_authenticated(self):
+        return self.authenticated
+
+    def is_anonymous(self):
+        return False
 
 # ------------------------------------------------------------------------------
 
@@ -125,7 +136,7 @@ def check_eligibility():
     if len(legends_out_data) == 0 or len(legends_back_data) == 0:
         return redirect(url_for('not-legend'))
     else:
-        user = User(user_id, username)
+        user = User(user_id, username, True)
         login_user(user)
         return redirect(url_for('index'))
 
@@ -144,8 +155,7 @@ def index():
 # callback to reload the user object
 @login_manager.user_loader
 def load_user(user_id):
-    user = db.session.query(user_id).one()
-    return User(user_id, user.name)
+    return User.query.get(user_id)
 
 # ------------------------------------------------------------------------------
 
