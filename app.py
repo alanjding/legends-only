@@ -143,8 +143,9 @@ def index():
 
 # callback to reload the user object
 @login_manager.user_loader
-def load_user(userid):
-    return User(userid)
+def load_user(user_id):
+    user = db.session.query(user_id).one()
+    return User(user_id, user.name)
 
 # ------------------------------------------------------------------------------
 
