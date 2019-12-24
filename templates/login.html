@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Legends Only - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bkgdimg.css') }}">
 </head>
 <body>
-    <h3>
-        Don't even think about clicking
-        <a href="https://www.strava.com/oauth/authorize?client_id=32278&response_type=code&redirect_uri=http://legends-only.herokuapp.com/exchange-token&approval_prompt=force&scope=read">here</a>
-        if you aren't a legend.
-    </h3>
-    <br>
-    You might be seeing this page after authorizing because this application didn't pick up the access code Strava sent back. If that's the case, try to log in again.
-    <br><br>
-    Thanks to Chang for the app idea!
+    <div class="container">
+        <div class="card border-0 shadow my-5">
+            <div class="card-body p-5">
+                <h1>
+                    Legends, enter
+                    <a href="https://www.strava.com/oauth/authorize?approval_prompt=auto&redirect_uri=https://legends-only.herokuapp.com/authorization&response_type=code&client_id=32278&scope=read,activity:read">here</a>!
+                </h1>
+                <p>Thanks to Chang for the app idea!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 </body>
 </html>
