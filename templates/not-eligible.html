@@ -2,15 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>You're not a legend!</title>
+    <title>Legends Only - Access Denied</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bkgdimg.css') }}">
 </head>
 <body>
     <div class="container">
         <div class="card border-0 shadow my-5">
             <div class="card-body p-5">
-                <h1>you're not a legend bye</h1>
+                <h1>Access Denied</h1>
+                <p>
+                    You are not yet a legend. Please make sure that a qualifying activity is on Strava!
+                </p>
             </div>
         </div>
     </div>
