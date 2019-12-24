@@ -12,6 +12,15 @@
         <div class="card border-0 shadow my-5">
             <div class="card-body p-5">
                 <h1>Legends Only Chat</h1>
+                <hr>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Welcome, {{ name }}!</p>
+                    </div>
+                    <div class="col-6">
+                        <p style="text-align: right"><a href="{{ url_for('logout') }}">Log out</a></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
