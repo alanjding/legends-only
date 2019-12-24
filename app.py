@@ -76,7 +76,8 @@ def authorization():
         return redirect(url_for('not_legend'))
 
     # user is authorized at this point
-    response = redirect(url_for('chat', name=name))
+    response = redirect(url_for('chat'))
+    response.set_cookie('name', name)
     response.set_cookie('authcookie', os.environ.get('VERIFICATION_KEY'))
     return response
 
@@ -86,12 +87,19 @@ def not_legend():
     return make_response(html)
 
 @app.route('/')
+@app.route('/index')
+def index():
+    if request.cookies.get('name') is not None:
+        return redirect(url_for('chat'))
+
+    return redirect(url_for('login'))
+
 @app.route('/chat')
 def chat():
     if request.cookies.get('authcookie') != os.environ.get('VERIFICATION_KEY'):
         return redirect(url_for('login'))
 
-    name = request.args.get('name')
+    name = request.cookies.get('name')
 
     return make_response(render_template('chat.html', name=name))
 
