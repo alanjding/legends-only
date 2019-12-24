@@ -125,6 +125,7 @@ def not_legend():
     html = render_template('not-eligible.html')
     return make_response(html)
 
+@app.route('/')
 @app.route('/chat')
 def chat():
     if request.cookies.get('authcookie') != os.environ.get('VERIFICATION_KEY'):
