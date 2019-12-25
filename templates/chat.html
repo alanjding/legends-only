@@ -49,7 +49,7 @@
 
         // setup event listeners
         socket.on('connect', function() {
-            // socket.emit('get_existing_messages');
+            socket.emit('get_existing_messages');
 
             // handle two ways to send a message
             $('#sendmsg').click(function() {
