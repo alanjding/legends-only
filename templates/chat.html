@@ -23,7 +23,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-12">
-                        <textarea class="form-control" style="min-width: 100%" rows="12" readonly id="chatbox"></textarea>
+                        <textarea class="form-control" style="min-width: 100%; color: white; border: 0" rows="12" readonly id="chatbox"></textarea>
                     </div>
                 </div>
                 <div class="row">
@@ -98,7 +98,7 @@
 
             let date = new Date(message.time);
 
-            $('#chatbox').append('<div><small>' +
+            $('#chatbox').val($('#chatbox').val() + '<div><small>' +
                 date.toLocaleDateString() + ' ' +
                 date.toLocaleTimeString() + '</small>' +
                 '<strong>' + message.sender + '</strong>' +
