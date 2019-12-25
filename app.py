@@ -23,8 +23,8 @@ LEGENDS_BACK = '22248349'
 
 app = Flask(__name__, template_folder='./templates')
 socketio = SocketIO(app)
-chat_log = [{'time': datetime.now(),
-             'sender': 'admin',
+chat_log = [{'time': datetime.now().timestamp(),
+             'sender': '',
              'text': 'This is the beginning of the chat.'}]
 
 # ------------------------------------------------------------------------------

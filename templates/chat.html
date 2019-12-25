@@ -56,7 +56,7 @@
                     socket.emit('handle_message', {
                         sender: '{{ name }}',
                         message: $('#inputmsg').val(),
-                        time: new Date()
+                        time: Date.now()
                     });
                 }
 
@@ -70,7 +70,7 @@
                         socket.emit('handle_message', {
                             sender: '{{ name }}',
                             message: $('#inputmsg').val(),
-                            time: new Date()
+                            time: Date.now()
                         });
                     }
 
@@ -82,18 +82,22 @@
         socket.on('display_existing_messages', function(messages) {
             console.log(messages.length);
             for (const message of messages) {
+                let date = new Date(message.time);
+
                 $('#chatbox').append('<div><small>' +
-                message.time.toLocaleDateString() + ' ' +
-                message.time.toLocaleTimeString() + '</small>' +
-                '<strong>' + message.sender + '</strong>' +
-                message.text + '</div>');
+                    date.toLocaleDateString() + ' ' +
+                    date.toLocaleTimeString() + '</small>' +
+                    '<strong>' + message.sender + '</strong>' +
+                    message.text + '</div>');
             }
         });
 
         socket.on('broadcast_message', function(message) {
+            let date = new Date(message.time);
+
             $('#chatbox').append('<div><small>' +
-                message.time.toLocaleDateString() + ' ' +
-                message.time.toLocaleTimeString() + '</small>' +
+                date.toLocaleDateString() + ' ' +
+                date.toLocaleTimeString() + '</small>' +
                 '<strong>' + message.sender + '</strong>' +
                 message.text + '</div>');
         });
