@@ -24,10 +24,9 @@ LEGENDS_BACK = '22248349'
 app = Flask(__name__, template_folder='./templates')
 app.config['SECRET_KEY'] = 'led leg sonny'
 socketio = SocketIO(app)
-chat_log = [json.dumps(
-                {'time': datetime.now().timestamp(),
-                 'sender': '',
-                 'text': 'This is the beginning of the chat.'})]
+chat_log = [{'time': datetime.now().timestamp(),
+             'sender': '',
+             'message': 'This is the beginning of the chat.'}]
 
 # ------------------------------------------------------------------------------
 
