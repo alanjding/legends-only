@@ -98,11 +98,12 @@
 
             let date = new Date(message.time);
 
-            $('#chatbox').html($('#chatbox').html() + '<div><small>' +
+            $('#chatbox').html($('#chatbox').html() + '<div><strong>' +
+                message.sender + ' </strong>' + message.message +
+                '<small style="text-align: right">' +
                 date.toLocaleDateString().match(/^[0-9]+?\/[0-9]+/) + ' ' +
-                date.toLocaleTimeString() + '</small>' +
-                '<strong> ' + message.sender + ' </strong> ' +
-                message.message + '</div>');
+                date.toLocaleTimeString() + '</small></div>'
+            );
         });
     </script>
 </body>
