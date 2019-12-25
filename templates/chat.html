@@ -80,6 +80,7 @@
         });
 
         socket.on('display_existing_messages', function(messages) {
+            console.log(messages.length);
             for (const message of messages) {
                 $('#chatbox').append('<div><small>' +
                 message.time.toLocaleDateString() + ' ' +
