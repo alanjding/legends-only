@@ -46,9 +46,11 @@
     <script type="text/javascript">
         let socket = io.connect('https://' + document.domain + ':' + location.port);
 
+        // setup event listeners
         socket.on('connect', function() {
             socket.emit('get_existing_messages');
 
+            // handle two ways to send a message
             $('#sendmsg').click(function() {
                 if ($('#inputmsg').val() !== '') {
                     socket.emit('handle_message', {
@@ -60,6 +62,21 @@
 
                 $('#inputmsg').val('').focus();
             });
+
+            $('#inputmsg').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    if ($('#inputmsg').val() !== '') {
+                        socket.emit('handle_message', {
+                            sender: '{{ name }}',
+                            message: $('#inputmsg').val(),
+                            time: new Date()
+                        });
+                    }
+
+                    $('#inputmsg').val('').focus();
+                }
+            });
         });
 
         socket.on('display_existing_messages', function(messages) {
@@ -70,7 +87,7 @@
                 '<strong>' + message.sender + '</strong>' +
                 message.text + '</div>');
             }
-        })
+        });
 
         socket.on('broadcast_message', function(message) {
             $('#chatbox').append('<div><small>' +

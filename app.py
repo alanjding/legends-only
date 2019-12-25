@@ -118,7 +118,7 @@ def handle_message(my_json):
 
 @socketio.on('get_existing_messages')
 def get_existing_messages():
-    socketio.emit('display_existing_messages', json.dump(chat_log))
+    socketio.emit('display_existing_messages', json.dumps(chat_log))
 
 # ------------------------------------------------------------------------------
 
