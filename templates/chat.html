@@ -94,10 +94,9 @@
         });*/
 
         socket.on('broadcast_message', function(message) {
-            console.log('Received message ' + message + ' from server.');
+            console.log('Received message from server.');
 
             let date = new Date(message.time);
-            message = JSON.parse(message);
 
             $('#chatbox').append('<div><small>' +
                 date.toLocaleDateString() + ' ' +
