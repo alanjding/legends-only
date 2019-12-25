@@ -79,19 +79,20 @@
                 }
             });
         });
-/*
+
         socket.on('display_existing_messages', function(messages) {
             console.log(messages.length);
             for (const message of messages) {
                 let date = new Date(message.time);
 
-                $('#chatbox').append('<div><small>' +
-                    date.toLocaleDateString() + ' ' +
-                    date.toLocaleTimeString() + '</small>' +
-                    '<strong>' + message.sender + '</strong>' +
-                    message.text + '</div>');
+                $('#chatbox').html($('#chatbox').html() + '<div title="Sent at ' +
+                    date.toLocaleDateString().match(/^[0-9]+?\/[0-9]+/) + ' ' +
+                    date.toLocaleTimeString() +
+                    '"><strong>' + message.sender + ' </strong>' +
+                    message.message + '</div>'
+                );
             }
-        });*/
+        });
 
         socket.on('broadcast_message', function(message) {
             console.log('Received message from server.');
