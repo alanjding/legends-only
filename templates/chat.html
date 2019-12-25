@@ -12,7 +12,6 @@
         <div class="card border-0 shadow my-5">
             <div class="card-body p-5">
                 <h1>Legends Only Chat</h1>
-                <hr>
                 <div class="row">
                     <div class="col-6">
                         <p>Welcome, {{ name }}!</p>
@@ -21,11 +20,65 @@
                         <p style="text-align: right"><a href="{{ url_for('logout') }}">Log out</a></p>
                     </div>
                 </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <textarea class="form-control" style="min-width: 100%" rows="12" readonly id="chatbox"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <textarea rows="1" class="form-control" placeholder="Type your message here" id="inputmsg"></textarea>
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="submit" id="sendmsg">Send</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script type="text/javascript">
+        let socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('connect', function() {
+            socket.emit('get_existing_messages');
+
+            $('#sendmsg').click(function() {
+                if ($('#inputmsg').val() !== '') {
+                    socket.emit('handle_message', {
+                        sender: '{{ name }}',
+                        message: $('#inputmsg').val(),
+                        time: new Date()
+                    });
+                }
+
+                $('#inputmsg').val('').focus();
+            });
+        });
+
+        socket.on('display_existing_messages', function(messages) {
+            for (const message of messages) {
+                $('#chatbox').append('<div><small>' +
+                message.time.toLocaleDateString() + ' ' +
+                message.time.toLocaleTimeString() + '</small>' +
+                '<strong>' + message.sender + '</strong>' +
+                message.text + '</div>');
+            }
+        })
+
+        socket.on('broadcast_message', function(message) {
+            $('#chatbox').append('<div><small>' +
+                message.time.toLocaleDateString() + ' ' +
+                message.time.toLocaleTimeString() + '</small>' +
+                '<strong>' + message.sender + '</strong>' +
+                message.text + '</div>');
+        });
+    </script>
 </body>
 </html>

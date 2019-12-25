@@ -8,7 +8,10 @@
 from sys import argv
 from flask import Flask, request, make_response, redirect, render_template, \
     url_for
+from flask_socketio import SocketIO
 from stravalib import Client
+from datetime import datetime
+import json
 import os
 import requests
 
@@ -19,6 +22,8 @@ LEGENDS_OUT = '22248347'
 LEGENDS_BACK = '22248349'
 
 app = Flask(__name__, template_folder='./templates')
+socketio = SocketIO(app)
+chat_log = []
 
 # ------------------------------------------------------------------------------
 
@@ -103,10 +108,19 @@ def chat():
 
     return make_response(render_template('chat.html', name=name))
 
+@socketio.on('handle_message')
+def handle_message(my_json):
+    # add chat message to log
+    chat_log.append(my_json)
+
+    # send message back to client-side
+    socketio.emit('broadcast_message', my_json)
+
+@socketio.on('get_existing_messages')
+def get_existing_messages():
+    socketio.emit('display_existing_messages', json.dump(chat_log))
+
 # ------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    if len(argv) != 2:
-        print('Usage: ' + argv[0] + ' port')
-        exit(1)
-    app.run(host='0.0.0.0', port=int(argv[1]), debug=True)
+    socketio.run(app)
