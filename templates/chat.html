@@ -82,6 +82,9 @@
 
         socket.on('display_existing_messages', function(messages) {
             console.log(messages.length);
+
+            $('#chatbox').html();
+
             for (const message of messages) {
                 let date = new Date(message.time);
 
