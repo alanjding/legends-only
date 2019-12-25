@@ -22,6 +22,7 @@ LEGENDS_OUT = '22248347'
 LEGENDS_BACK = '22248349'
 
 app = Flask(__name__, template_folder='./templates')
+app.config['SECRET_KEY'] = 'led leg sonny'
 socketio = SocketIO(app)
 chat_log = [json.dumps(
                 {'time': datetime.now().timestamp(),
@@ -113,14 +114,15 @@ def chat():
 
 @socketio.on('handle_message')
 def handle_message(my_json):
-    # add chat message to log
+    print('Data passed to handle_message: ' + str(my_json))
     chat_log.append(my_json)
-
-    # send message back to client-side
     socketio.emit('broadcast_message', my_json)
 
 # @socketio.on('get_existing_messages')
 # def get_existing_messages():
+#     print('Existing messages passed to client: ')
+#     for message in chat_log:
+#         print('\t' + str(message))
 #     socketio.emit('display_existing_messages', json.dumps(chat_log))
 
 # ------------------------------------------------------------------------------

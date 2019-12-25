@@ -45,10 +45,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script type="text/javascript">
         let socket = io.connect('https://' + document.domain + ':' + location.port);
+        console.log('Connected to server.');
 
         // setup event listeners
         socket.on('connect', function() {
-            socket.emit('get_existing_messages');
+            // socket.emit('get_existing_messages');
 
             // handle two ways to send a message
             $('#sendmsg').click(function() {
@@ -93,6 +94,8 @@
         });*/
 
         socket.on('broadcast_message', function(message) {
+            console.log('Received message ' + message + ' from server.');
+
             let date = new Date(message.time);
             message = JSON.parse(message);
 
