@@ -78,7 +78,7 @@
                 }
             });
         });
-
+/*
         socket.on('display_existing_messages', function(messages) {
             console.log(messages.length);
             for (const message of messages) {
@@ -90,10 +90,11 @@
                     '<strong>' + message.sender + '</strong>' +
                     message.text + '</div>');
             }
-        });
+        });*/
 
         socket.on('broadcast_message', function(message) {
             let date = new Date(message.time);
+            message = JSON.parse(message);
 
             $('#chatbox').append('<div><small>' +
                 date.toLocaleDateString() + ' ' +

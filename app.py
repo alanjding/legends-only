@@ -23,9 +23,10 @@ LEGENDS_BACK = '22248349'
 
 app = Flask(__name__, template_folder='./templates')
 socketio = SocketIO(app)
-chat_log = [{'time': datetime.now().timestamp(),
-             'sender': '',
-             'text': 'This is the beginning of the chat.'}]
+chat_log = [json.dumps(
+                {'time': datetime.now().timestamp(),
+                 'sender': '',
+                 'text': 'This is the beginning of the chat.'})]
 
 # ------------------------------------------------------------------------------
 
@@ -118,9 +119,9 @@ def handle_message(my_json):
     # send message back to client-side
     socketio.emit('broadcast_message', my_json)
 
-@socketio.on('get_existing_messages')
-def get_existing_messages():
-    socketio.emit('display_existing_messages', json.dumps(chat_log))
+# @socketio.on('get_existing_messages')
+# def get_existing_messages():
+#     socketio.emit('display_existing_messages', json.dumps(chat_log))
 
 # ------------------------------------------------------------------------------
 
