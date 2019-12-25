@@ -122,7 +122,7 @@ def get_existing_messages():
     print('Existing messages passed to client: ')
     for message in chat_log:
         print('\t' + str(message))
-    socketio.emit('display_existing_messages', json.dumps(chat_log))
+    socketio.emit('display_existing_messages', chat_log)
 
 # ------------------------------------------------------------------------------
 
