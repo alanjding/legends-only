@@ -10,10 +10,10 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Message(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "messages"
     id = db.Column(db.Integer, nullable=False,
                    primary_key=True, autoincrement=True)
-    time = db.Column(db.BigInteger)
+    time = db.Column(db.BIGINT)
     sender = db.Column(db.String)
     message = db.Column(db.String)
 
