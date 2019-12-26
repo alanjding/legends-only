@@ -20,7 +20,7 @@ def _message_time(message):
 def get_message_log():
     all_messages = db.session.query(Message).all()
     sorted(all_messages, key=_message_time)
-    return map(lambda message: {'time': message.time,
+    return list(map(lambda message: {'time': message.time,
                                 'sender': message.sender,
                                 'message': message.message},
-               all_messages)
+               all_messages))
