@@ -95,6 +95,8 @@
                     message.message + '</div>'
                 );
             }
+
+            // TODO: default scroll to bottom of chat
         });
 
         socket.on('broadcast_message', function(message) {
@@ -108,6 +110,8 @@
                 '"><strong>' + message.sender + ' </strong>' +
                 message.message + '</div>'
             );
+
+            // TODO: default scroll to bottom of chat
         });
     </script>
 </body>

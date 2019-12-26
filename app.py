@@ -5,12 +5,14 @@
 # Author: Alan Ding
 # ------------------------------------------------------------------------------
 
-from sys import argv
+from sys import stderr
 from flask import Flask, request, make_response, redirect, render_template, \
     url_for
 from flask_socketio import SocketIO
 from stravalib import Client
 from datetime import datetime
+from database import db
+from helper import *
 import json
 import os
 import requests
@@ -25,14 +27,19 @@ app = Flask(__name__, template_folder='./templates')
 app.config['SECRET_KEY'] = 'led leg sonny'
 socketio = SocketIO(app)
 
-# hacky workaround for ephemeral nature of global data
-os.environ['CHAT_LOG'] = json.dumps(
-    [{'time': datetime.now().timestamp(),
-      'sender': '',
-      'message': 'This is the beginning of the chat.'}]
-)
+db.init_app(app)
 
 # ------------------------------------------------------------------------------
+
+@app.before_first_request
+def run_on_start():
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    try:
+        db.create_all()
+    except Exception as e:
+        print('db.create_all() did nothing since the database already exists.',
+              file=stderr)
 
 @app.before_request
 def before_request():
@@ -118,18 +125,17 @@ def chat():
 @socketio.on('handle_message')
 def handle_message(my_json):
     print('Data passed to handle_message: ' + str(my_json))
-    chat_log = json.loads(os.environ.get('CHAT_LOG'))
-    chat_log.append(my_json)
+
+    add_message(time=my_json['time'],
+                sender=my_json['sender'],
+                message=my_json['message'])
+
     socketio.emit('broadcast_message', my_json)
-    os.environ['CHAT_LOG'] = json.dumps(chat_log)
 
 @socketio.on('get_existing_messages')
 def get_existing_messages():
-    print('Existing messages passed to client: ')
-    chat_log = json.loads(os.environ.get('CHAT_LOG'))
-    for message in chat_log:
-        print('\t' + str(message))
-    socketio.emit('display_existing_messages', chat_log)
+    message_log = get_message_log()
+    socketio.emit('display_existing_messages', message_log)
 
 # ------------------------------------------------------------------------------
 
