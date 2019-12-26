@@ -13,7 +13,7 @@ class Message(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, nullable=False,
                    primary_key=True, autoincrement=True)
-    time = db.Column(db.Integer)
+    time = db.Column(db.BigInteger)
     sender = db.Column(db.String)
     message = db.Column(db.String)
 
