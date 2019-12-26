@@ -24,9 +24,13 @@ LEGENDS_BACK = '22248349'
 app = Flask(__name__, template_folder='./templates')
 app.config['SECRET_KEY'] = 'led leg sonny'
 socketio = SocketIO(app)
-chat_log = [{'time': datetime.now().timestamp(),
-             'sender': '',
-             'message': 'This is the beginning of the chat.'}]
+
+# hacky workaround for ephemeral nature of global data
+os.environ['CHAT_LOG'] = json.dumps(
+    [{'time': datetime.now().timestamp(),
+      'sender': '',
+      'message': 'This is the beginning of the chat.'}]
+)
 
 # ------------------------------------------------------------------------------
 
@@ -114,12 +118,15 @@ def chat():
 @socketio.on('handle_message')
 def handle_message(my_json):
     print('Data passed to handle_message: ' + str(my_json))
+    chat_log = json.loads(os.environ.get('CHAT_LOG'))
     chat_log.append(my_json)
     socketio.emit('broadcast_message', my_json)
+    os.environ['CHAT_LOG'] = json.dumps(chat_log)
 
 @socketio.on('get_existing_messages')
 def get_existing_messages():
     print('Existing messages passed to client: ')
+    chat_log = json.loads(os.environ.get('CHAT_LOG'))
     for message in chat_log:
         print('\t' + str(message))
     socketio.emit('display_existing_messages', chat_log)
