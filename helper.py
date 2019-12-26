@@ -11,7 +11,7 @@ def add_message(time, sender, message):
     message = Message(time=time, sender=sender, message=message)
 
     db.session.add(message)
-    db.commit()
+    db.session.commit()
 
 def _message_time(message):
     return message.time
