@@ -96,7 +96,8 @@
                 );
             }
 
-            // TODO: default scroll to bottom of chat
+            // scroll to bottom of chat whenever the chat box is updated
+            $('#chatbox').scrollTop = $('#chatbox').scrollHeight;
         });
 
         socket.on('broadcast_message', function(message) {
@@ -111,7 +112,8 @@
                 message.message + '</div>'
             );
 
-            // TODO: default scroll to bottom of chat
+            // scroll to bottom of chat whenever the chat box is updated
+            $('#chatbox').scrollTop = $('#chatbox').scrollHeight;
         });
     </script>
 </body>
