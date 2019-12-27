@@ -6,8 +6,14 @@
 # ------------------------------------------------------------------------------
 
 from database import db, Message
+from sqlalchemy import func
 
 def add_message(time, sender, message):
+    if len(get_message_log()) > 9990:
+        least_recent = db.session.query(func.min(Message.time))
+        db.session.delete(least_recent)
+        db.session.commit()
+
     message = Message(time=time, sender=sender, message=message)
 
     db.session.add(message)
