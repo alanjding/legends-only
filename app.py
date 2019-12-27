@@ -25,9 +25,7 @@ LEGENDS_BACK = '22248349'
 
 app = Flask(__name__, template_folder='./templates')
 app.config['SECRET_KEY'] = 'led leg sonny'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://rcnyjolbsrsqcg:26984b8b' + \
-    'af5a8fc8d0dbd33fc79b552b76e60c04bd9a43aff8d0117458652fbe@ec2-54-235-18' + \
-    '0-123.compute-1.amazonaws.com:5432/d3rh42iajqlmsh'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 socketio = SocketIO(app)
 
 db.init_app(app)
