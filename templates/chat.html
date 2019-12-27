@@ -97,7 +97,8 @@
             }
 
             // scroll to bottom of chat whenever the chat box is updated
-            $('#chatbox').scrollTop = $('#chatbox').scrollHeight;
+            var element = document.getElementById('chatbox');
+            element.scrollTop = element.scrollHeight;
         });
 
         socket.on('broadcast_message', function(message) {
@@ -113,7 +114,8 @@
             );
 
             // scroll to bottom of chat whenever the chat box is updated
-            $('#chatbox').scrollTop = $('#chatbox').scrollHeight;
+            var element = document.getElementById('chatbox');
+            element.scrollTop = element.scrollHeight;
         });
 
         function textAreaAdjust(inputBox) {
