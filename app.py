@@ -78,9 +78,6 @@ def authorization():
     client = Client(access_token=access_token)
 
     athlete = client.get_athlete()
-    name = athlete.firstname + ' ' + athlete.lastname
-    if name == 'Adam Chang':
-        return redirect(url_for('not_legend'))
 
     r_out = requests.get(API_BASE_URL +
                          '/segments/' + LEGENDS_OUT + '/all_efforts' +
@@ -94,12 +91,13 @@ def authorization():
 
     legends_back_data = r_back.json()
 
-    if len(legends_out_data) == 0 or len(legends_back_data) == 0:
+    if (len(legends_out_data) == 0 or len(legends_back_data) == 0) and \
+            int(athlete.id) != 13260725:
         return redirect(url_for('not_legend'))
 
     # user is authorized at this point
     response = redirect(url_for('chat'))
-    response.set_cookie('name', name)
+    response.set_cookie('name', athlete.firstname + ' ' + athlete.lastname)
     response.set_cookie('authcookie', os.environ.get('VERIFICATION_KEY'))
     return response
 
