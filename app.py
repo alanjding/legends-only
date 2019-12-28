@@ -20,8 +20,8 @@ import requests
 # ------------------------------------------------------------------------------
 
 API_BASE_URL = 'https://www.strava.com/api/v3'
-LEGENDS_OUT = '22248347'
-LEGENDS_BACK = '22248349'
+LEGENDS_OUT = '22522586'
+LEGENDS_BACK = '22522598'
 
 app = Flask(__name__, template_folder='./templates')
 app.config['SECRET_KEY'] = 'led leg sonny'
@@ -90,7 +90,7 @@ def authorization():
     legends_back_data = r_back.json()
 
     if (len(legends_out_data) == 0 or len(legends_back_data) == 0) and \
-            int(athlete.id) != 13260725:
+            (int(athlete.id) != 13260725 and int(athlete.id) != 18685549):
         return redirect(url_for('not_legend'))
 
     # user is authorized at this point
